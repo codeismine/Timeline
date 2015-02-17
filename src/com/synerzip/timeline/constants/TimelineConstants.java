@@ -17,6 +17,7 @@ public class TimelineConstants {
 	private static final String USER = "user";
 	private static final String USERNAME = "username";
 	private static final String AVATARIMAGE = "avatar_image";
+	private static final String URL = "url";
 	private static final String Description = "description";
 	private static final String TEXT = "text";
 
@@ -33,9 +34,9 @@ public class TimelineConstants {
 				postDetail.setPosterName(dataJsonObject.getJSONObject(USER)
 						.getString(USERNAME));
 				postDetail.setAvatarURL(dataJsonObject.getJSONObject(USER)
-						.getString(AVATARIMAGE));
+						.getJSONObject(AVATARIMAGE).getString(URL));
 
-				postDetail.setPostText(dataJsonObject
+				postDetail.setPostText(dataJsonObject.getJSONObject(USER)
 						.getJSONObject(Description).getString(TEXT));
 				postDetails.add(postDetail);
 
@@ -50,7 +51,8 @@ public class TimelineConstants {
 
 	}
 
-	public static void CopyStream(InputStream inputStream, OutputStream outputStream) {
+	public static void CopyStream(InputStream inputStream,
+			OutputStream outputStream) {
 		final int buffer_size = 1024;
 		try {
 

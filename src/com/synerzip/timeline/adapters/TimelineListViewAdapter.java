@@ -24,16 +24,12 @@ public class TimelineListViewAdapter extends ArrayAdapter<PostDetails> {
 	public ImageLoader imageLoader;
 
 	public TimelineListViewAdapter(Context context, int resource,
-			ArrayList<PostDetails> movieBeans) {
-		super(context, resource, movieBeans);
+			ArrayList<PostDetails> postDetails) {
+		super(context, resource, postDetails);
 		// TODO Auto-generated constructor stub
 		this.mContext = context;
-		this.mPostDetails = movieBeans;
+		this.mPostDetails = postDetails;
 		imageLoader = new ImageLoader(context);
-	}
-
-	public int getCount() {
-		return mPostDetails.size();
 	}
 
 	static class ViewHolder {
@@ -42,7 +38,6 @@ public class TimelineListViewAdapter extends ArrayAdapter<PostDetails> {
 		public TextView postTextView;
 	}
 
-	// create a new ImageView for each item referenced by the Adapter
 	public View getView(final int position, View convertView, ViewGroup parent) {
 
 		ViewHolder viewHolder = null;
@@ -61,15 +56,12 @@ public class TimelineListViewAdapter extends ArrayAdapter<PostDetails> {
 			viewHolder.postTextView = (TextView) convertView
 					.findViewById(R.id.postTextView);
 
-			// The tag can be any Object, this just happens to be the ViewHolder
 			convertView.setTag(viewHolder);
 		} else {
-			// Get the ViewHolder back to get fast access to the TextView
-			// and the ImageView.
 			viewHolder = (ViewHolder) convertView.getTag();
 		}
 
-		viewHolder.avatarImageView.setScaleType(ImageView.ScaleType.FIT_XY);
+//		viewHolder.avatarImageView.setScaleType(ImageView.ScaleType.FIT_XY);
 
 		Animation animation = AnimationUtils.loadAnimation(mContext,
 				android.R.anim.fade_in);
@@ -81,16 +73,6 @@ public class TimelineListViewAdapter extends ArrayAdapter<PostDetails> {
 		// DisplayImage function from ImageLoader Class
 		imageLoader.DisplayImage(mPostDetails.get(position).getAvatarURL(),
 				viewHolder.avatarImageView);
-		// if (Build.VERSION.SDK_INT <= 11) {
-		// new LoadImageAsyncTask(context, viewHolder.image, movieBeans.get(
-		// position).getNumber(), movieBeans.get(position)
-		// .getThumbnailURL(), true).execute();
-		// } else {
-		// new LoadImageAsyncTask(context, viewHolder.image, movieBeans.get(
-		// position).getNumber(), movieBeans.get(position)
-		// .getThumbnailURL(), true)
-		// .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-		// }
 
 		return convertView;
 	}

@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -33,30 +34,32 @@ public class FetchTimelineAsyncTask extends AsyncTask<Void, Void, String> {
 	private ListView mListView;
 	private SwipeRefreshLayout mSwipeRefreshLayout;
 	private Button mRefreshButton;
+	private ArrayList<PostDetails> mPostDetails;
 
 	public FetchTimelineAsyncTask(Context context, ProgressBar progressBar,
 			ListView listView, SwipeRefreshLayout swipeRefreshLayout,
-			Button refreshButton) {
+			Button refreshButton, ArrayList<PostDetails> postDetails) {
 		super();
 		this.mContext = context;
 		this.mProgressBar = progressBar;
 		this.mListView = listView;
 		this.mSwipeRefreshLayout = swipeRefreshLayout;
 		this.mRefreshButton = refreshButton;
+		this.mPostDetails = postDetails;
 	}
 
 	@Override
 	protected void onPreExecute() {
-		// TODO Auto-generated method stub
+
 		super.onPreExecute();
 		mProgressBar.setVisibility(View.VISIBLE);
-		mListView.setVisibility(View.GONE);
+		// mListView.setVisibility(View.GONE);
 		mRefreshButton.setVisibility(View.GONE);
 	}
 
 	@Override
 	protected String doInBackground(Void... params) {
-		// TODO Auto-generated method stub
+
 		String result = null;
 		HttpClient httpClient = new DefaultHttpClient();
 		HttpGet httpGet = new HttpGet(TimelineConstants.timelineURL);
@@ -96,7 +99,7 @@ public class FetchTimelineAsyncTask extends AsyncTask<Void, Void, String> {
 
 	@Override
 	protected void onPostExecute(String result) {
-		// TODO Auto-generated method stub
+
 		super.onPostExecute(result);
 		mProgressBar.setVisibility(View.GONE);
 		mSwipeRefreshLayout.setRefreshing(false);
@@ -105,8 +108,9 @@ public class FetchTimelineAsyncTask extends AsyncTask<Void, Void, String> {
 					.returnPostDetails(result);
 
 			if (postDetails != null) {
+				mPostDetails.addAll(0, postDetails);
 				TimelineListViewAdapter timelineListViewAdapter = new TimelineListViewAdapter(
-						mContext, R.layout.timeline_card_item, postDetails);
+						mContext, R.layout.timeline_card_item, mPostDetails);
 
 				mListView.setVisibility(View.VISIBLE);
 				mListView.setAdapter(timelineListViewAdapter);

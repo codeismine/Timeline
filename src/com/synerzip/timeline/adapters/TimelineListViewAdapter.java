@@ -61,7 +61,6 @@ public class TimelineListViewAdapter extends ArrayAdapter<PostDetails> {
 			viewHolder = (ViewHolder) convertView.getTag();
 		}
 
-//		viewHolder.avatarImageView.setScaleType(ImageView.ScaleType.FIT_XY);
 
 		Animation animation = AnimationUtils.loadAnimation(mContext,
 				android.R.anim.fade_in);
@@ -70,7 +69,6 @@ public class TimelineListViewAdapter extends ArrayAdapter<PostDetails> {
 				.getPosterName());
 		viewHolder.postTextView.setText(mPostDetails.get(position)
 				.getPostText());
-		// DisplayImage function from ImageLoader Class
 		imageLoader.DisplayImage(mPostDetails.get(position).getAvatarURL(),
 				viewHolder.avatarImageView);
 

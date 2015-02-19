@@ -1,5 +1,7 @@
 package com.synerzip.timeline;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -12,6 +14,7 @@ import android.widget.Toast;
 
 import com.synerzip.timeline.asynctasks.FetchTimelineAsyncTask;
 import com.synerzip.timeline.constants.TimelineConstants;
+import com.synerzip.timeline.structures.PostDetails;
 
 public class TimelineActivity extends Activity {
 
@@ -19,11 +22,14 @@ public class TimelineActivity extends Activity {
 	private ProgressBar mProgressBar;
 	private SwipeRefreshLayout mSwipeRefreshLayout;
 	private Button mRefreshButton;
+	private ArrayList<PostDetails> mPostDetails;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.timeline_activity);
+
+		mPostDetails = new ArrayList<PostDetails>();
 
 		mListView = (ListView) findViewById(android.R.id.list);
 		mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
@@ -35,24 +41,29 @@ public class TimelineActivity extends Activity {
 
 			@Override
 			public void onRefresh() {
-				// TODO Auto-generated method stub
-				checkConnectionAndExecute();
+
+				checkConnectionAndExecute("swipeRefresh");
 			}
 		});
-		checkConnectionAndExecute();
+		checkConnectionAndExecute("");
 
 		mRefreshButton.setOnClickListener(new RefreshButtonOnClickListener());
 	}
 
-	private void checkConnectionAndExecute() {
+	private void checkConnectionAndExecute(String type) {
 		if (TimelineConstants.isConnectingToInternet(this)) {
 			new FetchTimelineAsyncTask(this, mProgressBar, mListView,
-					mSwipeRefreshLayout, mRefreshButton).execute();
+					mSwipeRefreshLayout, mRefreshButton, mPostDetails)
+					.execute();
 		} else {
-			mListView.setVisibility(View.GONE);
-			mProgressBar.setVisibility(View.GONE);
-			mRefreshButton.setVisibility(View.VISIBLE);
-			mSwipeRefreshLayout.setRefreshing(false);
+			if (type.equals("swipeRefresh")) {
+				mSwipeRefreshLayout.setRefreshing(false);
+			} else {
+				mListView.setVisibility(View.GONE);
+				mProgressBar.setVisibility(View.GONE);
+				mRefreshButton.setVisibility(View.VISIBLE);
+			}
+
 			Toast.makeText(this,
 					getResources().getString(R.string.internet_error),
 					Toast.LENGTH_LONG).show();
@@ -63,9 +74,9 @@ public class TimelineActivity extends Activity {
 
 		@Override
 		public void onClick(View view) {
-			// TODO Auto-generated method stub
+
 			view.setVisibility(View.GONE);
-			checkConnectionAndExecute();
+			checkConnectionAndExecute("");
 
 		}
 

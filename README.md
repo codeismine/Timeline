@@ -16,8 +16,12 @@ The timeline is fetched from: https://alpha-api.app.net/stream/0/posts/stream/gl
 
 # Error checking
 
-1) Internet connection is available
+1) Internet connection is available.
 
-2) Data is available
+2) Data is available.
 
-3) If no text available than show message "No Description available"
+3) If no text available than show message "No Description available".
+
+# Please Note
+
+appcompact_v7 needs to be import for running this project.

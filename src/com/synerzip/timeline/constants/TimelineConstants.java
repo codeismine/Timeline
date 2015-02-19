@@ -8,6 +8,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+
 import com.synerzip.timeline.structures.PostDetails;
 
 public class TimelineConstants {
@@ -31,13 +35,25 @@ public class TimelineConstants {
 			for (int i = 0; i < jsonArray.length(); i++) {
 				PostDetails postDetail = new PostDetails();
 				JSONObject dataJsonObject = jsonArray.getJSONObject(i);
-				postDetail.setPosterName(dataJsonObject.getJSONObject(USER)
-						.getString(USERNAME));
-				postDetail.setAvatarURL(dataJsonObject.getJSONObject(USER)
-						.getJSONObject(AVATARIMAGE).getString(URL));
 
-				postDetail.setPostText(dataJsonObject.getJSONObject(USER)
-						.getJSONObject(Description).getString(TEXT));
+				JSONObject userJsonObject = dataJsonObject.getJSONObject(USER);
+
+				postDetail.setPosterName(userJsonObject.isNull(USERNAME) ? ""
+						: userJsonObject.getString(USERNAME));
+
+				// if (userJsonObject.getJSONObject(AVATARIMAGE) != null) {
+				postDetail.setAvatarURL(userJsonObject.getJSONObject(
+						AVATARIMAGE).isNull(URL) ? "" : userJsonObject
+						.getJSONObject(AVATARIMAGE).getString(URL));
+				// } else {
+				// postDetail.setAvatarURL("");
+				// }
+
+				postDetail.setPostText(userJsonObject
+						.getJSONObject(Description).isNull("TEXT") ? ""
+						: userJsonObject.getJSONObject(Description).getString(
+								TEXT));
+
 				postDetails.add(postDetail);
 
 			}
@@ -45,6 +61,7 @@ public class TimelineConstants {
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return null;
 		}
 
 		return postDetails;
@@ -69,5 +86,20 @@ public class TimelineConstants {
 			}
 		} catch (Exception ex) {
 		}
+	}
+
+	public static boolean isConnectingToInternet(Context context) {
+		ConnectivityManager connectivity = (ConnectivityManager) context
+				.getSystemService(Context.CONNECTIVITY_SERVICE);
+		if (connectivity != null) {
+			NetworkInfo[] info = connectivity.getAllNetworkInfo();
+			if (info != null)
+				for (int i = 0; i < info.length; i++)
+					if (info[i].getState() == NetworkInfo.State.CONNECTED) {
+						return true;
+					}
+
+		}
+		return false;
 	}
 }

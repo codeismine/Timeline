@@ -18,6 +18,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.synerzip.timeline.R;
 import com.synerzip.timeline.adapters.TimelineListViewAdapter;
@@ -98,13 +99,23 @@ public class FetchTimelineAsyncTask extends AsyncTask<Void, Void, String> {
 			ArrayList<PostDetails> postDetails = TimelineConstants
 					.returnPostDetails(result);
 
-			TimelineListViewAdapter timelineListViewAdapter = new TimelineListViewAdapter(
-					mContext, R.layout.timeline_card_item, postDetails);
+			if (postDetails != null) {
+				TimelineListViewAdapter timelineListViewAdapter = new TimelineListViewAdapter(
+						mContext, R.layout.timeline_card_item, postDetails);
 
-			mListView.setVisibility(View.VISIBLE);
-			mListView.setAdapter(timelineListViewAdapter);
+				mListView.setVisibility(View.VISIBLE);
+				mListView.setAdapter(timelineListViewAdapter);
+			} else {
+				Toast.makeText(mContext,
+						mContext.getResources().getString(R.string.data_error),
+						Toast.LENGTH_LONG).show();
+			}
 
 		} else {
+
+			Toast.makeText(mContext,
+					mContext.getResources().getString(R.string.internet_error),
+					Toast.LENGTH_LONG).show();
 
 		}
 	}

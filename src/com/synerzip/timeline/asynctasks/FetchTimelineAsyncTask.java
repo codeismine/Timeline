@@ -16,6 +16,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -31,14 +32,17 @@ public class FetchTimelineAsyncTask extends AsyncTask<Void, Void, String> {
 	private ProgressBar mProgressBar;
 	private ListView mListView;
 	private SwipeRefreshLayout mSwipeRefreshLayout;
+	private Button mRefreshButton;
 
 	public FetchTimelineAsyncTask(Context context, ProgressBar progressBar,
-			ListView listView, SwipeRefreshLayout swipeRefreshLayout) {
+			ListView listView, SwipeRefreshLayout swipeRefreshLayout,
+			Button refreshButton) {
 		super();
 		this.mContext = context;
 		this.mProgressBar = progressBar;
 		this.mListView = listView;
 		this.mSwipeRefreshLayout = swipeRefreshLayout;
+		this.mRefreshButton = refreshButton;
 	}
 
 	@Override
@@ -47,6 +51,7 @@ public class FetchTimelineAsyncTask extends AsyncTask<Void, Void, String> {
 		super.onPreExecute();
 		mProgressBar.setVisibility(View.VISIBLE);
 		mListView.setVisibility(View.GONE);
+		mRefreshButton.setVisibility(View.GONE);
 	}
 
 	@Override
@@ -109,6 +114,7 @@ public class FetchTimelineAsyncTask extends AsyncTask<Void, Void, String> {
 				Toast.makeText(mContext,
 						mContext.getResources().getString(R.string.data_error),
 						Toast.LENGTH_LONG).show();
+				mRefreshButton.setVisibility(View.VISIBLE);
 			}
 
 		} else {
@@ -116,6 +122,7 @@ public class FetchTimelineAsyncTask extends AsyncTask<Void, Void, String> {
 			Toast.makeText(mContext,
 					mContext.getResources().getString(R.string.internet_error),
 					Toast.LENGTH_LONG).show();
+			mRefreshButton.setVisibility(View.VISIBLE);
 
 		}
 	}

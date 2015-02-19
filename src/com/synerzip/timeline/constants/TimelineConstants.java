@@ -25,9 +25,7 @@ public class TimelineConstants {
 	private static final String Description = "description";
 	private static final String TEXT = "text";
 
-	public static ArrayList<PostDetails> returnPostDetails(String json)
-
-	{
+	public static ArrayList<PostDetails> returnPostDetails(String json) {
 		ArrayList<PostDetails> postDetails = new ArrayList<PostDetails>();
 		try {
 			JSONObject jsonObject = new JSONObject(json);
@@ -41,18 +39,22 @@ public class TimelineConstants {
 				postDetail.setPosterName(userJsonObject.isNull(USERNAME) ? ""
 						: userJsonObject.getString(USERNAME));
 
-				// if (userJsonObject.getJSONObject(AVATARIMAGE) != null) {
-				postDetail.setAvatarURL(userJsonObject.getJSONObject(
-						AVATARIMAGE).isNull(URL) ? "" : userJsonObject
-						.getJSONObject(AVATARIMAGE).getString(URL));
-				// } else {
-				// postDetail.setAvatarURL("");
-				// }
+				if (!userJsonObject.isNull(AVATARIMAGE)) {
+					postDetail.setAvatarURL(userJsonObject.getJSONObject(
+							AVATARIMAGE).isNull(URL) ? "" : userJsonObject
+							.getJSONObject(AVATARIMAGE).getString(URL));
+				} else {
+					postDetail.setAvatarURL("");
+				}
 
-				postDetail.setPostText(userJsonObject
-						.getJSONObject(Description).isNull("TEXT") ? ""
-						: userJsonObject.getJSONObject(Description).getString(
-								TEXT));
+				if (!userJsonObject.isNull(Description)) {
+					postDetail.setPostText(userJsonObject.getJSONObject(
+							Description).isNull(TEXT) ? "" : userJsonObject
+							.getJSONObject(Description).getString(TEXT));
+
+				} else {
+					postDetail.setPostText("No description available");
+				}
 
 				postDetails.add(postDetail);
 

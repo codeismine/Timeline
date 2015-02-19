@@ -2,9 +2,9 @@
 <resources>
 
     <string name="app_name">Timeline</string>
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="data_error">No data available, Please try again</string>
-    <string name="internet_error">No Internet available, Please try again</string>
+    <string name="data_error">Data not available, Please try again</string>
+    <string name="internet_error">Internet not available, Please try again</string>
+    <string name="refresh_button">Refresh</string>
 
 </resources>

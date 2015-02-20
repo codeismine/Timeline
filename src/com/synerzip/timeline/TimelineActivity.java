@@ -13,19 +13,27 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.synerzip.timeline.asynctasks.FetchTimelineAsyncTask;
-import com.synerzip.timeline.constants.TimelineConstants;
 import com.synerzip.timeline.structures.PostDetails;
+import com.synerzip.timeline.utility.TimelineUtility;
+
+/**
+ * TimelineActivity represents a list showing Poster's Avatar, Name and Description of the post
+ * @author Jitesh Lalwani
+ */
 
 public class TimelineActivity extends Activity {
 
+	
 	private ListView mListView;
 	private ProgressBar mProgressBar;
 	private SwipeRefreshLayout mSwipeRefreshLayout;
 	private Button mRefreshButton;
 	private ArrayList<PostDetails> mPostDetails;
 
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.timeline_activity);
 
@@ -50,8 +58,13 @@ public class TimelineActivity extends Activity {
 		mRefreshButton.setOnClickListener(new RefreshButtonOnClickListener());
 	}
 
+	/** 
+	 * This function checks if Internet connection is available and if connection is
+	 * available than calls FetchTimelineAsyncTask which loads the data in ListView
+	 * @param type type determines whether this function was called from SwipeRefreshLayout or not 
+	 */
 	private void checkConnectionAndExecute(String type) {
-		if (TimelineConstants.isConnectingToInternet(this)) {
+		if (TimelineUtility.isConnectingToInternet(this)) {
 			new FetchTimelineAsyncTask(this, mProgressBar, mListView,
 					mSwipeRefreshLayout, mRefreshButton, mPostDetails)
 					.execute();
@@ -70,6 +83,10 @@ public class TimelineActivity extends Activity {
 		}
 	}
 
+	/**
+	 * OnClickListener Inner class for Refresh Button
+	 * @author Jitesh Lalwani
+	 */
 	private class RefreshButtonOnClickListener implements View.OnClickListener {
 
 		@Override

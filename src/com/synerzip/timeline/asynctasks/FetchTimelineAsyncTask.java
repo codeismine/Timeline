@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Collections;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -26,7 +25,13 @@ import com.synerzip.timeline.R;
 import com.synerzip.timeline.adapters.TimelineListViewAdapter;
 import com.synerzip.timeline.constants.TimelineConstants;
 import com.synerzip.timeline.structures.PostDetails;
+import com.synerzip.timeline.utility.TimelineUtility;
 
+/**
+ * FetchTimelineAsyncTask fetches data to be shown in Listview (Avatar, Name and
+ * Description)
+ * @author Jitesh Lalwani
+ */
 public class FetchTimelineAsyncTask extends AsyncTask<Void, Void, String> {
 
 	private Context mContext;
@@ -104,7 +109,7 @@ public class FetchTimelineAsyncTask extends AsyncTask<Void, Void, String> {
 		mProgressBar.setVisibility(View.GONE);
 		mSwipeRefreshLayout.setRefreshing(false);
 		if (result != null) {
-			ArrayList<PostDetails> postDetails = TimelineConstants
+			ArrayList<PostDetails> postDetails = TimelineUtility
 					.returnPostDetails(result);
 
 			if (postDetails != null) {

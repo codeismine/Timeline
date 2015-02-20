@@ -22,8 +22,13 @@ import android.os.Handler;
 import android.widget.ImageView;
 
 import com.synerzip.timeline.R;
-import com.synerzip.timeline.constants.TimelineConstants;
+import com.synerzip.timeline.utility.TimelineUtility;
 
+/**
+ * Used to download image from url and resize downloaded image and make file
+ * cache on sdcard. Lazy load images for listview rows.
+ * @author Jitesh Lalwani
+ */
 public class ImageLoader {
 
 	// Initialize MemoryCache
@@ -52,6 +57,12 @@ public class ImageLoader {
 	// default image show in list (Before online image download)
 	final int stub_id = R.drawable.ic_launcher;
 
+	/**
+	 * Sets Image to ImageView
+	 * 
+	 * @param url
+	 * @param imageView
+	 */
 	public void DisplayImage(String url, ImageView imageView) {
 		// Store image and url in Map
 		imageViews.put(imageView, url);
@@ -73,6 +84,12 @@ public class ImageLoader {
 		}
 	}
 
+	/**
+	 * Makes a queue of Image URL
+	 * 
+	 * @param url
+	 * @param imageView
+	 */
 	private void queuePhoto(String url, ImageView imageView) {
 		// Store image and url in PhotoToLoad object
 		PhotoToLoad p = new PhotoToLoad(url, imageView);
@@ -95,6 +112,11 @@ public class ImageLoader {
 		}
 	}
 
+	/**
+	 * Runnable class to download image from web.
+	 * 
+	 * @author Jitesh Lalwani
+	 */
 	class PhotosLoader implements Runnable {
 		PhotoToLoad photoToLoad;
 
@@ -133,12 +155,19 @@ public class ImageLoader {
 		}
 	}
 
+	/**
+	 * Function to download image from web and return Bitmap of the downloaded
+	 * image.
+	 * 
+	 * @param url
+	 * @return
+	 */
 	private Bitmap getBitmap(String url) {
-		File f = fileCache.getFile(url);
+		File file = fileCache.getFile(url);
 
 		// from SD cache
 		// CHECK : if trying to decode file which not exist in cache return null
-		Bitmap b = decodeFile(f);
+		Bitmap b = decodeFile(file);
 		if (b != null)
 			return b;
 
@@ -156,19 +185,19 @@ public class ImageLoader {
 
 			// Constructs a new FileOutputStream that writes to file
 			// if file not exist then it will create file
-			OutputStream outputStream = new FileOutputStream(f);
+			OutputStream outputStream = new FileOutputStream(file);
 
 			// See Utils class CopyStream method
 			// It will each pixel from input stream and
 			// write pixels to output stream (file)
-			TimelineConstants.CopyStream(inputStream, outputStream);
+			TimelineUtility.CopyStream(inputStream, outputStream);
 
 			outputStream.close();
 			conn.disconnect();
 
 			// Now file created and going to resize file with defined height
 			// Decodes image and scales it to reduce memory consumption
-			bitmap = decodeFile(f);
+			bitmap = decodeFile(file);
 
 			return bitmap;
 
@@ -180,15 +209,20 @@ public class ImageLoader {
 		}
 	}
 
-	// Decodes image and scales it to reduce memory consumption
-	private Bitmap decodeFile(File f) {
+	/**
+	 * Decodes image and scales it to reduce memory consumption
+	 * 
+	 * @param file
+	 * @return
+	 */
+	private Bitmap decodeFile(File file) {
 
 		try {
 
 			// Decode image size
 			BitmapFactory.Options o = new BitmapFactory.Options();
 			o.inJustDecodeBounds = true;
-			FileInputStream stream1 = new FileInputStream(f);
+			FileInputStream stream1 = new FileInputStream(file);
 			BitmapFactory.decodeStream(stream1, null, o);
 			stream1.close();
 
@@ -211,7 +245,7 @@ public class ImageLoader {
 			// decode with current scale values
 			BitmapFactory.Options o2 = new BitmapFactory.Options();
 			o2.inSampleSize = scale;
-			FileInputStream stream2 = new FileInputStream(f);
+			FileInputStream stream2 = new FileInputStream(file);
 			Bitmap bitmap = BitmapFactory.decodeStream(stream2, null, o2);
 			stream2.close();
 			return bitmap;
@@ -223,17 +257,27 @@ public class ImageLoader {
 		return null;
 	}
 
+	/**
+	 * Check url is already exist in imageViews MAP
+	 * 
+	 * @param photoToLoad
+	 * @return
+	 */
 	boolean imageViewReused(PhotoToLoad photoToLoad) {
 
 		String tag = imageViews.get(photoToLoad.imageView);
-		// Check url is already exist in imageViews MAP
 		if (tag == null || !tag.equals(photoToLoad.url))
 			return true;
 		return false;
 	}
 
-	// Used to display bitmap in the UI thread
+	/**
+	 * Used to display bitmap in the UI thread
+	 * 
+	 * @author Jitesh
+	 */
 	class BitmapDisplayer implements Runnable {
+
 		Bitmap bitmap;
 		PhotoToLoad photoToLoad;
 
@@ -254,8 +298,10 @@ public class ImageLoader {
 		}
 	}
 
+	/**
+	 * Clear cache directory downloaded images and stored data in maps
+	 */
 	public void clearCache() {
-		// Clear cache directory downloaded images and stored data in maps
 		memoryCache.clear();
 		fileCache.clear();
 	}

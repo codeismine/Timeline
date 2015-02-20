@@ -1,5 +1,9 @@
 package com.synerzip.timeline.structures;
 
+/**
+ * PostDetails class has getters and setters methods for storing Post details (Avatar, Name and Description)
+ * @author Jitesh Lalwani
+ */
 public class PostDetails {
 
 	private String avatarURL;

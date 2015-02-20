@@ -17,6 +17,10 @@ import com.synerzip.timeline.R;
 import com.synerzip.timeline.structures.ImageLoader;
 import com.synerzip.timeline.structures.PostDetails;
 
+/**
+ * Used to create each list row. Inflate timeline_card_item.xml file for each row and call ImageLoader.java to download image from url and resize downloaded image cache on sdcard.
+ * @author Jitesh Lalwani
+ */
 public class TimelineListViewAdapter extends ArrayAdapter<PostDetails> {
 
 	private Context mContext;

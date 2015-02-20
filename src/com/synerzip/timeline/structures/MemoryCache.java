@@ -8,6 +8,10 @@ import java.util.Map.Entry;
 import android.graphics.Bitmap;
 import android.util.Log;
 
+/**
+ * Used to set cache folder size limit ( How much mb/kb downloaded image cache folder will store ) and also used to clear cache files from sdcard.
+ * @author Jitesh Lalwani
+ */
 public class MemoryCache {
 
 	private static final String TAG = "MemoryCache";
@@ -28,12 +32,21 @@ public class MemoryCache {
 		setLimit(Runtime.getRuntime().maxMemory() / 4);
 	}
 
+	/**
+	 * Set Limits for Memory Cache
+	 * @param new_limit
+	 */
 	public void setLimit(long new_limit) {
 
 		limit = new_limit;
 		Log.i(TAG, "MemoryCache will use up to " + limit / 1024. / 1024. + "MB");
 	}
 
+	/**
+	 * Returns Bitmap
+	 * @param id
+	 * @return
+	 */
 	public Bitmap get(String id) {
 		try {
 			if (!cache.containsKey(id))
@@ -47,6 +60,10 @@ public class MemoryCache {
 		}
 	}
 
+	/**
+	 * @param id
+	 * @param bitmap
+	 */
 	public void put(String id, Bitmap bitmap) {
 		try {
 			if (cache.containsKey(id))
@@ -59,6 +76,9 @@ public class MemoryCache {
 		}
 	}
 
+	/**
+	 * Checks Size
+	 */
 	private void checkSize() {
 		Log.i(TAG, "cache size=" + size + " length=" + cache.size());
 		if (size > limit) {
@@ -77,9 +97,11 @@ public class MemoryCache {
 		}
 	}
 
+	/**
+	 * Clear cache
+	 */
 	public void clear() {
 		try {
-			// Clear cache
 			cache.clear();
 			size = 0;
 		} catch (NullPointerException ex) {
@@ -87,6 +109,11 @@ public class MemoryCache {
 		}
 	}
 
+	/**
+	 * Gets Size in Bytes for Bitmap
+	 * @param bitmap
+	 * @return
+	 */
 	long getSizeInBytes(Bitmap bitmap) {
 		if (bitmap == null)
 			return 0;

@@ -17,23 +17,23 @@ import com.synerzip.timeline.structures.PostDetails;
 import com.synerzip.timeline.utility.TimelineUtility;
 
 /**
- * TimelineActivity represents a list showing Poster's Avatar, Name and Description of the post
+ * TimelineActivity represents a list showing Poster's Avatar, Name and
+ * Description of the post
+ * 
  * @author Jitesh Lalwani
  */
 
 public class TimelineActivity extends Activity {
 
-	
 	private ListView mListView;
 	private ProgressBar mProgressBar;
 	private SwipeRefreshLayout mSwipeRefreshLayout;
 	private Button mRefreshButton;
 	private ArrayList<PostDetails> mPostDetails;
 
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		
+
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.timeline_activity);
 
@@ -43,6 +43,9 @@ public class TimelineActivity extends Activity {
 		mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
 
 		mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+
+		mSwipeRefreshLayout.setColorSchemeResources(R.color.orange,
+				R.color.green, R.color.blue, R.color.orange);
 
 		mRefreshButton = (Button) findViewById(R.id.refreshButton);
 		mSwipeRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
@@ -58,10 +61,14 @@ public class TimelineActivity extends Activity {
 		mRefreshButton.setOnClickListener(new RefreshButtonOnClickListener());
 	}
 
-	/** 
-	 * This function checks if Internet connection is available and if connection is
-	 * available than calls FetchTimelineAsyncTask which loads the data in ListView
-	 * @param type type determines whether this function was called from SwipeRefreshLayout or not 
+	/**
+	 * This function checks if Internet connection is available and if
+	 * connection is available than calls FetchTimelineAsyncTask which loads the
+	 * data in ListView
+	 * 
+	 * @param type
+	 *            type determines whether this function was called from
+	 *            SwipeRefreshLayout or not
 	 */
 	private void checkConnectionAndExecute(String type) {
 		if (TimelineUtility.isConnectingToInternet(this)) {
@@ -85,6 +92,7 @@ public class TimelineActivity extends Activity {
 
 	/**
 	 * OnClickListener Inner class for Refresh Button
+	 * 
 	 * @author Jitesh Lalwani
 	 */
 	private class RefreshButtonOnClickListener implements View.OnClickListener {

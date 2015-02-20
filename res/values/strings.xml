@@ -7,4 +7,8 @@
     <string name="internet_error">Internet not available, Please try again</string>
     <string name="refresh_button">Refresh</string>
 
+    <color name="orange">#FF9900</color>
+    <color name="green">#009900</color>
+    <color name="blue">#000099</color>
+
 </resources>
